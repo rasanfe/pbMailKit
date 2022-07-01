@@ -37,3 +37,16 @@ C:\projecto pw2021\RSRSYSTEM\NetCore\MailKitNetSmtp\MailKitNetSmtp\obj\Debug\net
 C:\projecto pw2021\RSRSYSTEM\NetCore\MailKitNetSmtp\MailKitNetSmtp\obj\Debug\netcoreapp3.1\MailKitNetSmtp.csproj.CopyComplete
 C:\projecto pw2021\RSRSYSTEM\NetCore\MailKitNetSmtp\MailKitNetSmtp\obj\Debug\netcoreapp3.1\MailKitNetSmtp.dll
 C:\projecto pw2021\RSRSYSTEM\NetCore\MailKitNetSmtp\MailKitNetSmtp\obj\Debug\netcoreapp3.1\MailKitNetSmtp.pdb
+C:\projecto pw2021\Blog\Publicado\pbMailkit\MailKitNetSmtp\MailKitNetSmtp\bin\Debug\netcoreapp3.1\MailKitNetSmtp.deps.json
+C:\projecto pw2021\Blog\Publicado\pbMailkit\MailKitNetSmtp\MailKitNetSmtp\bin\Debug\netcoreapp3.1\MailKitNetSmtp.dll
+C:\projecto pw2021\Blog\Publicado\pbMailkit\MailKitNetSmtp\MailKitNetSmtp\bin\Debug\netcoreapp3.1\MailKitNetSmtp.pdb
+C:\projecto pw2021\Blog\Publicado\pbMailkit\MailKitNetSmtp\MailKitNetSmtp\bin\Debug\netcoreapp3.1\MailKit.dll
+C:\projecto pw2021\Blog\Publicado\pbMailkit\MailKitNetSmtp\MailKitNetSmtp\bin\Debug\netcoreapp3.1\MimeKit.dll
+C:\projecto pw2021\Blog\Publicado\pbMailkit\MailKitNetSmtp\MailKitNetSmtp\obj\Debug\netcoreapp3.1\MailKitNetSmtp.csproj.AssemblyReference.cache
+C:\projecto pw2021\Blog\Publicado\pbMailkit\MailKitNetSmtp\MailKitNetSmtp\obj\Debug\netcoreapp3.1\MailKitNetSmtp.GeneratedMSBuildEditorConfig.editorconfig
+C:\projecto pw2021\Blog\Publicado\pbMailkit\MailKitNetSmtp\MailKitNetSmtp\obj\Debug\netcoreapp3.1\MailKitNetSmtp.AssemblyInfoInputs.cache
+C:\projecto pw2021\Blog\Publicado\pbMailkit\MailKitNetSmtp\MailKitNetSmtp\obj\Debug\netcoreapp3.1\MailKitNetSmtp.AssemblyInfo.cs
+C:\projecto pw2021\Blog\Publicado\pbMailkit\MailKitNetSmtp\MailKitNetSmtp\obj\Debug\netcoreapp3.1\MailKitNetSmtp.csproj.CoreCompileInputs.cache
+C:\projecto pw2021\Blog\Publicado\pbMailkit\MailKitNetSmtp\MailKitNetSmtp\obj\Debug\netcoreapp3.1\MailKitNetSmtp.csproj.CopyComplete
+C:\projecto pw2021\Blog\Publicado\pbMailkit\MailKitNetSmtp\MailKitNetSmtp\obj\Debug\netcoreapp3.1\MailKitNetSmtp.dll
+C:\projecto pw2021\Blog\Publicado\pbMailkit\MailKitNetSmtp\MailKitNetSmtp\obj\Debug\netcoreapp3.1\MailKitNetSmtp.pdb

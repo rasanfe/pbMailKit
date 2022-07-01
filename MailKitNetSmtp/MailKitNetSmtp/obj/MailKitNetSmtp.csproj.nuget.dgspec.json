@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\projecto pw2021\\Blog\\Pendiente\\pbMailkit\\MailKitNetSmtp\\MailKitNetSmtp\\MailKitNetSmtp.csproj": {}
+    "C:\\projecto pw2021\\Blog\\Publicado\\pbMailkit\\MailKitNetSmtp\\MailKitNetSmtp\\MailKitNetSmtp.csproj": {}
   },
   "projects": {
-    "C:\\projecto pw2021\\Blog\\Pendiente\\pbMailkit\\MailKitNetSmtp\\MailKitNetSmtp\\MailKitNetSmtp.csproj": {
+    "C:\\projecto pw2021\\Blog\\Publicado\\pbMailkit\\MailKitNetSmtp\\MailKitNetSmtp\\MailKitNetSmtp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\projecto pw2021\\Blog\\Pendiente\\pbMailkit\\MailKitNetSmtp\\MailKitNetSmtp\\MailKitNetSmtp.csproj",
+        "projectUniqueName": "C:\\projecto pw2021\\Blog\\Publicado\\pbMailkit\\MailKitNetSmtp\\MailKitNetSmtp\\MailKitNetSmtp.csproj",
         "projectName": "MailKitNetSmtp",
-        "projectPath": "C:\\projecto pw2021\\Blog\\Pendiente\\pbMailkit\\MailKitNetSmtp\\MailKitNetSmtp\\MailKitNetSmtp.csproj",
+        "projectPath": "C:\\projecto pw2021\\Blog\\Publicado\\pbMailkit\\MailKitNetSmtp\\MailKitNetSmtp\\MailKitNetSmtp.csproj",
         "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\projecto pw2021\\Blog\\Pendiente\\pbMailkit\\MailKitNetSmtp\\MailKitNetSmtp\\obj\\",
+        "outputPath": "C:\\projecto pw2021\\Blog\\Publicado\\pbMailkit\\MailKitNetSmtp\\MailKitNetSmtp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -27,6 +27,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -59,7 +60,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.200\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
         }
       }
     }
