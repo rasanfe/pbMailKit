@@ -3,11 +3,11 @@ Envío Correo SMTP con MailKit y PowerBuilder
 
 Ejemplo para envíar correos electrónicos desde PowerBuilder.
 
-Se incluiyen 2 projectos:
+Actualizado a Pb2022 Build 1716 (06-08-2022)
 
-Directorio principal: El Projecto PowerBuilder que he Creado para El envió de Correos usando la libreria .NET Mailkit. Actualizado a Pb2022 Build 1716 (06-08-2022)
+Si necesitas modificar el proyecto de Visual Studio 2022 lo tienes disponible aqui:
 
-Carpeta: MailKitNetSmtp --> Projecto VisualStudio 2022 (compatible con SnapDevelop 2021) con la libria .Net que creado para poderla importar en el projecto pbMailkit.
+https://github.com/rasanfe/MailKitNetSmtp
 
 Para estar al tanto de lo que publico puedes seguir mi blog:
 
