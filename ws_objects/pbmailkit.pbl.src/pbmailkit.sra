@@ -17,14 +17,16 @@ string themename = "Do Not Use Themes"
 boolean nativepdfvalid = false
 boolean nativepdfincludecustomfont = false
 string nativepdfappname = ""
-long richtextedittype = 2
-long richtexteditx64type = 3
-long richtexteditversion = 1
+long richtextedittype = 5
+long richtexteditx64type = 5
+long richtexteditversion = 3
 string richtexteditkey = ""
-string appicon = "email.ico"
+string appicon = "icono.ico"
 string appruntimeversion = "22.0.0.1878"
 boolean manualsession = false
 boolean unsupportedapierror = false
+boolean bignoreservercertificate = false
+uint ignoreservercertificate = 0
 end type
 global pbmailkit pbmailkit
 
