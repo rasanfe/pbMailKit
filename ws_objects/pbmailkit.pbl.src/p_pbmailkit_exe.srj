@@ -6,10 +6,10 @@ COM:RSRSYSTEM
 DES:Appeon Power Builder 2022 Product File 64Bits
 CPY:Ramón San Félix Ramón
 PRD:PBMailkit2022
-PVS:2022.0.1878.3
-PVN:2022,0,1878,3
-FVS:2022.0.1878.3
-FVN:2022,0,1878,3
+PVS:2022.0.1878.4
+PVN:2022,0,1878,4
+FVS:2022.0.1878.4
+FVN:2022,0,1878,4
 MAN:0,asInvoker,0
 PBD:pbmailkit.pbl,,1
 OBJ:C:\projecto pw2022\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,u_tabpg,u

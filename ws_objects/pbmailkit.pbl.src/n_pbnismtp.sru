@@ -1,10 +1,10 @@
 ﻿$PBExportHeader$n_pbnismtp.sru
 forward
-global type n_pbnismtp from nvo_mailkitsmptrsr
+global type n_pbnismtp from nonvisualobject
 end type
 end forward
 
-global type n_pbnismtp from nvo_mailkitsmptrsr
+global type n_pbnismtp from nonvisualobject
 end type
 global n_pbnismtp n_pbnismtp
 
@@ -57,6 +57,8 @@ Constant Integer HighPriority = 3
 // windows-1258	Vietnamese (Windows)
 // iso-8859-1		Western European (ISO)
 // windows-1252	Western European (Windows)
+nvo_mailkitsmptrsr in_smtp
+
 
 end variables
 
@@ -64,6 +66,34 @@ forward prototypes
 public function long of_parse (readonly string as_string, readonly string as_separator, ref string as_outarray[])
 public function boolean of_validemail (string as_email, ref string as_errormsg)
 public subroutine of_addtostring (ref string as_outputstring, string as_newstring)
+public subroutine  of_setmessage(string as_pbmessage) throws exception
+public subroutine  of_setmessage(string as_pbmessage,boolean abln_pbhtml) throws exception
+public subroutine  of_setrecipientemail(string as_pbrecipientname,string as_pbrecipientmail) throws exception
+public subroutine  of_setccrecipientemail(string as_pbccrecipientname,string as_pbccrecipientmail) throws exception
+public subroutine  of_setbccrecipientemail(string as_pbbccrecipientname,string as_pbbccrecipientmail) throws exception
+public subroutine  of_setreplytoemail(string as_pbreplytoname,string as_pbreplytomail) throws exception
+public subroutine  of_setsenderemail(string as_pbsendername,string as_pbsendermail) throws exception
+public subroutine  of_setsmtpserver(string as_pbsmtpserver) throws exception
+public subroutine  of_setsubject(string as_pbsubject) throws exception
+public subroutine  of_setattachment(string as_pbattachment) throws exception
+public subroutine  of_setcharset(string as_pbcharset) throws exception
+public subroutine  of_setusernamepassword(string as_pbusername,string as_pbpassword) throws exception
+public subroutine  of_setport(long al_pbport) throws exception
+public subroutine  of_setauthmethod(long al_pbauthmethod) throws exception
+public subroutine  of_setconnectiontype(long al_pbconnecttype) throws exception
+public function string of_getlasterrormessage ()
+public subroutine  of_setmailername(string as_pbmailername) throws exception
+public subroutine  of_setpriority(long al_pbpriority) throws exception
+public subroutine  of_setprioritynone() throws exception
+public subroutine  of_setprioritylow() throws exception
+public subroutine  of_setprioritynormal() throws exception
+public subroutine  of_setpriorityhigh() throws exception
+public subroutine  of_setreadreceiptrequested(boolean abln_pbreadreceipt) throws exception
+public function long of_smtpconnect() throws exception
+public function long of_smtpsend() throws exception
+public function long of_smtpdisconnect() throws exception
+public function exception of_get_exception (string as_message)
+public function long of_send () throws exception
 end prototypes
 
 public function long of_parse (readonly string as_string, readonly string as_separator, ref string as_outarray[]);// -----------------------------------------------------------------------------
@@ -275,11 +305,257 @@ End If
 
 end subroutine
 
+public subroutine  of_setmessage(string as_pbmessage) throws exception;
+in_smtp. of_setmessage(as_pbmessage)
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public subroutine  of_setmessage(string as_pbmessage,boolean abln_pbhtml) throws exception;
+in_smtp.of_setmessage(as_pbmessage, abln_pbhtml) 
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public subroutine  of_setrecipientemail(string as_pbrecipientname,string as_pbrecipientmail) throws exception;
+in_smtp.of_setrecipientemail(as_pbrecipientname,as_pbrecipientmail)
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public subroutine  of_setccrecipientemail(string as_pbccrecipientname,string as_pbccrecipientmail) throws exception;
+in_smtp.of_setccrecipientemail(as_pbccrecipientname, as_pbccrecipientmail)
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public subroutine  of_setbccrecipientemail(string as_pbbccrecipientname,string as_pbbccrecipientmail) throws exception;
+in_smtp.of_setbccrecipientemail(as_pbbccrecipientname, as_pbbccrecipientmail)
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public subroutine  of_setreplytoemail(string as_pbreplytoname,string as_pbreplytomail) throws exception;
+in_smtp.of_setreplytoemail(as_pbreplytoname, as_pbreplytomail)
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public subroutine  of_setsenderemail(string as_pbsendername,string as_pbsendermail) throws exception;
+in_smtp.of_setsenderemail( as_pbsendername, as_pbsendermail)
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public subroutine  of_setsmtpserver(string as_pbsmtpserver) throws exception;
+in_smtp.of_setsmtpserver(as_pbsmtpserver) 
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public subroutine  of_setsubject(string as_pbsubject) throws exception;
+in_smtp.of_setsubject(as_pbsubject)
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public subroutine  of_setattachment(string as_pbattachment) throws exception;
+in_smtp.of_setattachment(as_pbattachment)
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public subroutine  of_setcharset(string as_pbcharset) throws exception;
+in_smtp.of_setcharset(as_pbcharset)
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public subroutine  of_setusernamepassword(string as_pbusername,string as_pbpassword) throws exception;
+in_smtp.of_setusernamepassword( as_pbusername, as_pbpassword)
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public subroutine  of_setport(long al_pbport) throws exception;
+in_smtp.of_setport(al_pbport)
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public subroutine  of_setauthmethod(long al_pbauthmethod) throws exception;
+in_smtp.of_setauthmethod(al_pbauthmethod)
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public subroutine  of_setconnectiontype(long al_pbconnecttype) throws exception;
+in_smtp.of_setconnectiontype(al_pbconnecttype)
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public function string of_getlasterrormessage ();String ls_ErrorText
+
+ls_ErrorText = in_smtp.of_getlasterrormessage()
+
+IF trim(ls_ErrorText)=""  then Setnull(ls_ErrorText)
+
+RETURN ls_ErrorText
+end function
+
+public subroutine  of_setmailername(string as_pbmailername) throws exception;
+in_smtp.of_setmailername(as_pbmailername)
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public subroutine  of_setpriority(long al_pbpriority) throws exception;
+in_smtp.of_setpriority(al_pbpriority)
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public subroutine  of_setprioritynone() throws exception;
+in_smtp.of_setprioritynone()
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public subroutine  of_setprioritylow() throws exception;
+in_smtp.of_setprioritylow()
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public subroutine  of_setprioritynormal() throws exception;
+in_smtp. of_setprioritynormal()
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public subroutine  of_setpriorityhigh() throws exception;
+in_smtp.of_setpriorityhigh()
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public subroutine  of_setreadreceiptrequested(boolean abln_pbreadreceipt) throws exception;
+in_smtp.of_setreadreceiptrequested(abln_pbreadreceipt)
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+end subroutine
+
+public function long of_smtpconnect() throws exception;long ll_result
+ll_result = in_smtp.of_smtpconnect()
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+RETURN ll_result
+end  function
+
+public function long of_smtpsend() throws exception;Long ll_result
+ll_result = in_smtp.of_smtpsend()
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+RETURN ll_result
+end  function
+
+public function long of_smtpdisconnect() throws exception;Long ll_result
+ll_result = in_smtp.of_smtpsend()
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+RETURN ll_result
+end  function
+
+public function exception of_get_exception (string as_message);exception lu_exception
+lu_exception = create exception
+lu_exception.setmessage(as_message)
+return lu_exception
+end function
+
+public function long of_send () throws exception;Long ll_result
+
+ll_result = in_smtp.of_send()
+
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  throw of_get_exception(in_smtp.is_ErrorText)
+END IF
+
+return ll_result
+
+
+end function
+
 on n_pbnismtp.create
 call super::create
+TriggerEvent( this, "constructor" )
 end on
 
 on n_pbnismtp.destroy
+TriggerEvent( this, "destructor" )
 call super::destroy
 end on
+
+event constructor;in_smtp = CREATE nvo_mailkitsmptrsr 
+
+//Checks the result
+IF in_smtp.il_ErrorType < 0 THEN
+  messagebox("Failed", in_smtp.is_ErrorText)
+  RETURN
+END IF
+end event
+
+event destructor;Destroy in_smtp 
+end event
 
