@@ -8,7 +8,6 @@ end forward
 global type u_tabpg from userobject
 integer width = 2414
 integer height = 1504
-long backcolor = 79416533
 long tabtextcolor = 33554432
 long picturemaskcolor = 536870912
 event ue_pagechanged ( integer oldindex )

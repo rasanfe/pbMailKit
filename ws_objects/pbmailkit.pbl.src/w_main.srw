@@ -26,7 +26,6 @@ integer height = 2192
 boolean titlebar = true
 string title = "PBMAILKIT EMail"
 boolean controlmenu = true
-long backcolor = 67108864
 string icon = "AppIcon!"
 boolean center = true
 st_info st_info
@@ -104,7 +103,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Arial"
 long textcolor = 8421504
-long backcolor = 67108864
 string text = "Copyright © Ramón San Félix Ramón  rsrsystem.soft@gmail.com"
 alignment alignment = right!
 boolean focusrectangle = false

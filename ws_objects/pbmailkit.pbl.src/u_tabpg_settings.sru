@@ -38,10 +38,10 @@ dw_settings.InsertRow(0)
 dw_settings.SetItem(1, "server", of_getreg("Server", ""))
 dw_settings.SetItem(1, "userid", of_getreg("Userid", ""))
 dw_settings.SetItem(1, "password", of_getreg("Password", ""))
-dw_settings.SetItem(1, "port", Long(of_getreg("Port", "25")))
-dw_settings.SetItem(1, "conntype", Long(of_getreg("ConnType", "1")))
-dw_settings.SetItem(1, "authmethod", Long(of_getreg("AuthMethod", "5")))
-dw_settings.SetItem(1, "characterset", of_getreg("Charset", "utf-8"))
+dw_settings.SetItem(1, "port", Long(of_getreg("Port", "587")))
+dw_settings.SetItem(1, "secureprotocol", Long(of_getreg("SecureProtocol", "0")))
+dw_settings.SetItem(1, "enabletls", of_getreg("enableTLS", "Y"))
+dw_settings.SetItem(1, "encoding", of_getreg("Encoding", "UTF-8"))
 
 end event
 
@@ -82,9 +82,9 @@ of_setreg("Server", dw_settings.GetItemString(1, "server"))
 of_setreg("Userid", dw_settings.GetItemString(1, "userid"))
 of_setreg("Password", dw_settings.GetItemString(1, "password"))
 of_setreg("Port", String(dw_settings.GetItemNumber(1, "port")))
-of_setreg("ConnType", String(dw_settings.GetItemNumber(1, "conntype")))
-of_setreg("AuthMethod", String(dw_settings.GetItemNumber(1, "authmethod")))
-of_setreg("Charset", dw_settings.GetItemString(1, "characterset"))
+of_setreg("SecureProtocol", String(dw_settings.GetItemNumber(1, "secureprotocol")))
+of_setreg("enableTLS", String(dw_settings.GetItemString(1, "enabletls")))
+of_setreg("Encoding", dw_settings.GetItemString(1, "encoding"))
 
 end event
 

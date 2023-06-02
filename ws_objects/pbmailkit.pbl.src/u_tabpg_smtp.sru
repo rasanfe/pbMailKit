@@ -230,6 +230,7 @@ event ue_pagechanged;call super::ue_pagechanged;sle_sender_email.SetFocus()
 end event
 
 type cbx_receipt from checkbox within u_tabpg_smtp
+boolean visible = false
 integer x = 1280
 integer y = 1360
 integer width = 407
@@ -241,7 +242,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "Read Receipt"
 end type
 
@@ -273,7 +273,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "CC Name:"
 boolean focusrectangle = false
 end type
@@ -306,7 +305,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "CC Email:"
 boolean focusrectangle = false
 end type
@@ -323,7 +321,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "High Priority"
 end type
 
@@ -394,7 +391,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "Attachments:"
 boolean focusrectangle = false
 end type
@@ -429,7 +425,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "Send as HTML"
 end type
 
@@ -445,7 +440,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "To Email:"
 boolean focusrectangle = false
 end type
@@ -478,7 +472,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "From Email:"
 boolean focusrectangle = false
 end type
@@ -495,7 +488,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "From Name:"
 boolean focusrectangle = false
 end type
@@ -544,7 +536,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "Body:"
 alignment alignment = right!
 boolean focusrectangle = false
@@ -581,28 +572,30 @@ string facename = "Tahoma"
 string text = "Send Email"
 end type
 
-event clicked;n_pbnismtp ln_smtp 
+event clicked;n_cst_smtpclient ln_smtp 
 Boolean lb_Html, lb_Priority, lb_Receipt
-Integer li_port, li_idx, li_max, li_authmethod, li_conntype, li_rc
-String ls_server, ls_body, ls_userid, ls_passwd, ls_subject, ls_attach
-String ls_charset, ls_errmsg, ls_work
+Integer li_port, li_idx, li_max, li_SecureProtocol, li_rc
+String ls_server, ls_body, ls_userid, ls_passwd, ls_subject, ls_attach, ls_enableTLS
+String ls_Encoding, ls_errmsg, ls_work
 String ls_senderName, ls_recipientName, ls_ccrecipName
 String ls_senderMail, ls_recipientMail, ls_ccrecipMail
+Boolean lb_enableTLS
 
 SetPointer(HourGlass!)
 
 ChangeDirectory(is_currentdirectory)
 
- ln_smtp  = CREATE n_pbnismtp
+ ln_smtp  = CREATE n_cst_smtpclient
 
 // get settings
 ls_server     = of_getreg("Server", "")
 ls_userid     = of_getreg("Userid", "")
 ls_passwd     = of_getreg("Password", "6qk#6dfd[2b:")
 li_port       = Integer(of_getreg("Port", "25"))
-li_authmethod = Integer(of_getreg("AuthMethod", "2"))
-li_conntype   = Integer(of_getreg("ConnType", "0"))
-ls_charset    = of_getreg("Charset", "windows-1252")
+ls_enableTLS = of_getreg("enableTLS", "Y")
+lb_enableTLS = gf_iif(ls_enableTLS = "Y", true, false)
+li_SecureProtocol   = Integer(of_getreg("SecureProtocol", "0"))
+ls_Encoding    = of_getreg("Encoding", "UTF-8")
 
 // input field edits
 If ls_server = "" Then
@@ -617,21 +610,11 @@ If sle_sender_email.text = "" Then
 		"From Email is a required field!", StopSign!)
 	Return
 End If
-If Not ln_smtp.of_ValidEmail(sle_sender_email.text, ls_errmsg) Then
-	sle_sender_email.SetFocus()
-	MessageBox("From Email Format Error", ls_errmsg, StopSign!)
-	Return
-End If
 
 If sle_recip_email.text = "" Then
 	sle_recip_email.SetFocus()
 	MessageBox("Edit Error", &
 		"To Email is a required field!", StopSign!)
-	Return
-End If
-If Not ln_smtp.of_ValidEmail(sle_recip_email.text, ls_errmsg) Then
-	sle_recip_email.SetFocus()
-	MessageBox("To Email Format Error", ls_errmsg, StopSign!)
 	Return
 End If
 
@@ -688,59 +671,44 @@ try
 	SetPointer(HourGlass!)
 
 	// set server settings
-	ln_smtp.of_SetMailerName("PBMailkit 1.0") //Modificación Topwiz
-	// set server settings
-	ln_smtp.of_SetSMTPServer(ls_server)
-	If ls_userid <> "" Then
-		ln_smtp.of_SetUserNamePassword(ls_userid, ls_passwd)
-	End If
-	ln_smtp.of_SetPort(li_port)
-	ln_smtp.of_SetAuthMethod(li_AuthMethod)
-	ln_smtp.of_SetConnectionType(li_ConnType)
-	ln_smtp.of_SetCharSet(ls_Charset)
+	ln_smtp.of_Set_Host(ls_server)
+	ln_smtp.of_Set_Login(ls_userid, ls_passwd)
+	ln_smtp.of_Set_Port(li_port)
+	ln_smtp.of_Enable_TLS(lb_enableTLS)
+	ln_smtp.of_Set_Secure_Protocol(li_SecureProtocol)
+	ln_smtp.of_Set_Encoding(ls_Encoding)
 
 	// set message properties
-	ln_smtp.of_SetSenderEmail(ls_senderName, ls_senderMail)
-	ln_smtp.of_SetRecipientEmail(ls_recipientName, ls_recipientMail)
+	ln_smtp.of_Set_Sender(ls_senderName, ls_senderMail)
+	ln_smtp.of_add_Recipient(ls_recipientName, ls_recipientMail)
 	If ls_ccrecipMail <> "" Then
-		ln_smtp.of_SetCCRecipientEmail(ls_ccrecipName, ls_ccrecipMail)
+		ln_smtp.of_add_CC(ls_ccrecipName, ls_ccrecipMail)
 	End If
-	ln_smtp.of_SetSubject(ls_subject)
-	ln_smtp.of_SetMessage(ls_body, lb_Html)
+	ln_smtp.of_Set_Subject(ls_subject)
+	ln_smtp.of_Set_Message(ls_body, lb_Html)
 	If lb_Priority Then
-		ln_smtp.of_SetPriority(ln_smtp.HighPriority)
+		ln_smtp.of_Set_Priority(ln_smtp.ii_HighPriority)  
+	Else
+		ln_smtp.of_Set_Priority(ln_smtp.ii_NormalPriority)
 	End If
-	ln_smtp.of_SetReadReceiptRequested(lb_Receipt)
-	
-	
-//	If ls_attach <> "" Then
-//		ln_smtp.of_SetAttachment(ls_attach)
-//	End If
 
 	//Set Atachments
 	li_max = lb_attachments.TotalItems()
+	
 	For li_idx = 1 To li_max
 		ls_attach = lb_attachments.Text(li_idx)
-		ln_smtp.of_SetAttachment(ls_attach)
+		ln_smtp.of_add_Attachment(ls_attach)
 	Next
 
 	// send the email
 	li_rc = ln_smtp.of_Send()
-
-catch ( NullObjectError noe )
-	MessageBox("Null Object Exception", noe.getMessage(), StopSign!)
-catch ( PBXRuntimeError pbxre )
-	MessageBox("PBX Exception", pbxre.getMessage(), StopSign!)
-catch ( Throwable oe )
-	MessageBox("Other Exception", oe.getMessage(), StopSign!)
-finally
+	
 	If li_rc = 1 Then
-		MessageBox(this.text, "Message Sent!")
-	Else
-		ls_errmsg = ln_smtp.of_GetLastErrorMessage()
-		MessageBox(this.text + " Error: " + String(li_rc), &
-						ls_errmsg, StopSign!)
+		MessageBox(this.text, "Enviado!")
 	End If
+		
+catch ( n_ex ln_ex )
+		ln_ex.of_msg()
 end try
 
 Destroy  ln_smtp
@@ -774,7 +742,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "Subject:"
 alignment alignment = right!
 boolean focusrectangle = false
@@ -808,7 +775,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "To Name:"
 boolean focusrectangle = false
 end type

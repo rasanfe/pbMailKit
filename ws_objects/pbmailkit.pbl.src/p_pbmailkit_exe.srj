@@ -1,25 +1,27 @@
 ﻿$PBExportHeader$p_pbmailkit_exe.srj
 $PBExportComments$Generated Application Executable Project
-EXE:pbmailkit.exe,,0,1,1,0,C:\Program Files (x86)\Appeon\Common\PowerBuilder\Runtime 22.0.0.1900
+EXE:pbmailkit.exe,,0,1,1,0,C:\Program Files (x86)\Appeon\Common\PowerBuilder\Runtime 22.1.0.2693
 CMP:0,0,0,3,0,0,1
 COM:RSRSYSTEM
 DES:Appeon Power Builder 2022 Product File 64Bits
 CPY:Ramón San Félix Ramón
 PRD:PBMailkit2022
-PVS:2022.0.1900.7
-PVN:2022,0,1900,7
-FVS:2022.0.1900.7
-FVN:2022,0,1900,7
+PVS:2022.2.2693.8
+PVN:2022,2,2693,8
+FVS:2022.2.2693.8
+FVN:2022,2,2693,8
 MAN:0,asInvoker,0
 PBD:pbmailkit.pbl,,1
 OBJ:C:\proyecto pw2022\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,u_tabpg_smtp,u
 OBJ:C:\proyecto pw2022\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,u_tabpg,u
+OBJ:C:\proyecto pw2022\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,gf_iif,f
 OBJ:C:\proyecto pw2022\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,u_tabpg_settings,u
 OBJ:C:\proyecto pw2022\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,w_main,w
 OBJ:C:\proyecto pw2022\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,u_tab,u
-OBJ:C:\proyecto pw2022\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,n_pbnismtp,u
+OBJ:C:\proyecto pw2022\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,n_cst_smtpclient,u
 OBJ:C:\proyecto pw2022\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,u_tabpg_bulk,u
-OBJ:C:\proyecto pw2022\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,nvo_mailkitsmptrsr,u
 OBJ:C:\proyecto pw2022\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,d_settings,d
 OBJ:C:\proyecto pw2022\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,u_tab_main,u
+OBJ:C:\proyecto pw2022\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,n_ex,u
 OBJ:C:\proyecto pw2022\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,pbmailkit,a
+OBJ:C:\proyecto pw2022\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,gf_throw,f

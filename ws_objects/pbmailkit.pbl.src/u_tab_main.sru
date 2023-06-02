@@ -19,6 +19,7 @@ end forward
 global type u_tab_main from u_tab
 integer width = 2455
 integer height = 1636
+long backcolor = 1073741824
 tabpage_smtp tabpage_smtp
 tabpage_bulk tabpage_bulk
 tabpage_settings tabpage_settings
@@ -29,12 +30,10 @@ on u_tab_main.create
 this.tabpage_smtp=create tabpage_smtp
 this.tabpage_bulk=create tabpage_bulk
 this.tabpage_settings=create tabpage_settings
-int iCurrent
 call super::create
-iCurrent=UpperBound(this.Control)
-this.Control[iCurrent+1]=this.tabpage_smtp
-this.Control[iCurrent+2]=this.tabpage_bulk
-this.Control[iCurrent+3]=this.tabpage_settings
+this.Control[]={this.tabpage_smtp,&
+this.tabpage_bulk,&
+this.tabpage_settings}
 end on
 
 on u_tab_main.destroy

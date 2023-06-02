@@ -203,7 +203,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "To Email #4:"
 boolean focusrectangle = false
 end type
@@ -220,7 +219,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "To Email #3:"
 boolean focusrectangle = false
 end type
@@ -237,7 +235,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "To Email #2:"
 boolean focusrectangle = false
 end type
@@ -302,7 +299,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "High Priority"
 end type
 
@@ -318,7 +314,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "Send as HTML"
 end type
 
@@ -334,7 +329,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "To Email #1:"
 boolean focusrectangle = false
 end type
@@ -367,7 +361,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "From Email:"
 boolean focusrectangle = false
 end type
@@ -384,7 +377,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "From Name:"
 boolean focusrectangle = false
 end type
@@ -433,7 +425,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "Body:"
 alignment alignment = right!
 boolean focusrectangle = false
@@ -470,27 +461,28 @@ string facename = "Tahoma"
 string text = "Send Email"
 end type
 
-event clicked;n_pbnismtp ln_smtp
+event clicked;n_cst_smtpclient ln_smtp
 
-Boolean lb_Html, lb_Priority
-Integer li_port, li_authmethod, li_conntype, li_rc, li_idx, li_max
-String ls_server, ls_body, ls_userid, ls_passwd, ls_subject
-String ls_senderName, ls_senderMail, ls_recipientsMails[], ls_recipientsNames[], ls_charset, ls_errmsg
+Boolean lb_Html, lb_Priority, lb_enableTLS 
+Integer li_port, li_SecureProtocol, li_rc, li_idx, li_max
+String ls_server, ls_body, ls_userid, ls_passwd, ls_subject, ls_enableTLS
+String ls_senderName, ls_senderMail, ls_recipientsMails[], ls_recipientsNames[], ls_Encoding, ls_errmsg
 
 SetPointer(HourGlass!)
 
 ChangeDirectory(is_currentdirectory)
 
- ln_smtp  = CREATE n_pbnismtp
+ ln_smtp  = CREATE n_cst_smtpclient
 
 // get settings
 ls_server     = of_getreg("Server", "")
 ls_userid     = of_getreg("Userid", "")
 ls_passwd     = of_getreg("Password", "")
-li_port       = Integer(of_getreg("Port", "25"))
-li_authmethod = Integer(of_getreg("AuthMethod", "2"))
-li_conntype   = Integer(of_getreg("ConnType", "0"))
-ls_charset    = of_getreg("Charset", "windows-1252")
+li_port       = Integer(of_getreg("Port", "587"))
+ls_enableTLS = of_getreg("enableTLS", "Y")
+lb_enableTLS = gf_iif(ls_enableTLS = "Y", true, false)
+li_SecureProtocol   = Integer(of_getreg("SecureProtocol", "0"))
+ls_Encoding    = of_getreg("Encoding", "UTF-8")
 
 // input field edits
 If ls_server = "" Then
@@ -503,11 +495,6 @@ If sle_sender_email.text = "" Then
 	sle_sender_email.SetFocus()
 	MessageBox("Edit Error", &
 		"From Email is a required field!", StopSign!)
-	Return
-End If
-If Not ln_smtp.of_ValidEmail(sle_sender_email.text, ls_errmsg) Then
-	sle_sender_email.SetFocus()
-	MessageBox("From Email Format Error", ls_errmsg, StopSign!)
 	Return
 End If
 
@@ -551,41 +538,21 @@ lb_Priority  = cbx_priority.Checked
 
 // get recipients
 If sle_recip_email1.text <> "" Then
-	If Not ln_smtp.of_ValidEmail(sle_recip_email1.text, ls_errmsg) Then
-		sle_recip_email1.SetFocus()
-		MessageBox("To Email #1 Format Error", ls_errmsg, StopSign!)
-		Return
-	End If
 	li_max = UpperBound(ls_recipientsMails[]) + 1
 	ls_recipientsNames[li_max] = "" // sle_recip_name1.text
 	ls_recipientsMails[li_max] = sle_recip_email1.text
 End If
 If sle_recip_email2.text <> "" Then
-	If Not ln_smtp.of_ValidEmail(sle_recip_email2.text, ls_errmsg) Then
-		sle_recip_email1.SetFocus()
-		MessageBox("To Email #2 Format Error", ls_errmsg, StopSign!)
-		Return
-	End If
 	li_max = UpperBound(ls_recipientsMails[]) + 1
 	ls_recipientsNames[li_max] = "" // sle_recip_name2.text
 	ls_recipientsMails[li_max] = sle_recip_email2.text
 End If
 If sle_recip_email3.text <> "" Then
-	If Not ln_smtp.of_ValidEmail(sle_recip_email3.text, ls_errmsg) Then
-		sle_recip_email1.SetFocus()
-		MessageBox("To Email #3 Format Error", ls_errmsg, StopSign!)
-		Return
-	End If
 	li_max = UpperBound(ls_recipientsMails[]) + 1
 	ls_recipientsNames[li_max] = "" // sle_recip_name3.text
 	ls_recipientsMails[li_max] = sle_recip_email3.text
 End If
 If sle_recip_email4.text <> "" Then
-	If Not ln_smtp.of_ValidEmail(sle_recip_email4.text, ls_errmsg) Then
-		sle_recip_email1.SetFocus()
-		MessageBox("To Email #4 Format Error", ls_errmsg, StopSign!)
-		Return
-	End If
 	li_max = UpperBound(ls_recipientsMails[]) + 1
 	ls_recipientsNames[li_max] = "" // sle_recip_name4.text
 	ls_recipientsMails[li_max] = sle_recip_email4.text
@@ -593,97 +560,42 @@ End If
 
 SetPointer(HourGlass!)
 
-// connect to the server
+// send the email
 try
-	ln_smtp.of_SetMailerName("PBMailkit 1.0") //Modificación Topwiz
+	SetPointer(HourGlass!)
+
 	// set server settings
-	ln_smtp.of_SetSMTPServer(ls_server)
-	If ls_userid <> "" Then
-		ln_smtp.of_SetUserNamePassword(ls_userid, ls_passwd)
-	End If
-	ln_smtp.of_SetPort(li_port)
-	ln_smtp.of_SetAuthMethod(li_AuthMethod)
-	ln_smtp.of_SetConnectionType(li_ConnType)
-	ln_smtp.of_SetCharSet(ls_Charset)
+	ln_smtp.of_Set_Host(ls_server)
+	ln_smtp.of_Set_Login(ls_userid, ls_passwd)
+	ln_smtp.of_Set_Port(li_port)
+	ln_smtp.of_Enable_TLS(lb_enableTLS)
+	ln_smtp.of_Set_Secure_Protocol(li_SecureProtocol)
+	ln_smtp.of_Set_Encoding(ls_Encoding)
+
+	// set message properties
+	ln_smtp.of_Set_Sender(ls_senderName, ls_senderMail)
+	ln_smtp.of_Set_Recipient(ls_recipientsNames[], ls_recipientsMails[])
+	ln_smtp.of_Set_Subject(ls_subject)
+	ln_smtp.of_Set_Message(ls_body, lb_Html)
 	If lb_Priority Then
-		ln_smtp.of_SetPriority(ln_smtp.HighPriority)
-	End If
-	// connect to the server
-	li_rc = ln_smtp.of_SmtpConnect()
-catch ( NullObjectError noe1 )
-	MessageBox("SmtpConnect: Null Object Exception", &
-					noe1.getMessage(), StopSign!)
-catch ( PBXRuntimeError pbxre1 )
-	MessageBox("SmtpConnect: PBX Exception", &
-					pbxre1.getMessage(), StopSign!)
-catch ( Throwable oe1 )
-	MessageBox("SmtpConnect: Other Exception", &
-					oe1.getMessage(), StopSign!)
-finally
-	If li_rc = 1 Then
-		// Success
+		ln_smtp.of_Set_Priority(ln_smtp.ii_HighPriority)  
 	Else
-		ls_errmsg = ln_smtp.of_GetLastErrorMessage()
-		MessageBox("SmtpConnect Error: " + String(li_rc), &
-						ls_errmsg, StopSign!)
+		ln_smtp.of_Set_Priority(ln_smtp.ii_NormalPriority)
 	End If
+
+	
+	// send the email
+	li_rc = ln_smtp.of_Send()
+	
+	If li_rc = 1 Then
+		MessageBox(this.text, "Enviado!")
+	End If
+		
+catch ( n_ex ln_ex )
+		ln_ex.of_msg()
 end try
 
-// send the emails
-For li_idx = 1 To li_max
-	try
-		// set message properties
-		ln_smtp.of_SetSenderEmail(ls_senderName, ls_senderMail)
-		ln_smtp.of_SetRecipientEmail(ls_recipientsNames[li_idx], ls_recipientsMails[li_idx])
-		ln_smtp.of_SetSubject(ls_subject)
-		ln_smtp.of_SetMessage(ls_body, lb_Html)
-		// send the email
-		li_rc = ln_smtp.of_SmtpSend()
-	catch ( NullObjectError noe2 )
-		MessageBox("SmtpSend: Null Object Exception", &
-						noe2.getMessage(), StopSign!)
-	catch ( PBXRuntimeError pbxre2 )
-		MessageBox("SmtpSend: PBX Exception", &
-						pbxre2.getMessage(), StopSign!)
-	catch ( Throwable oe2 )
-		MessageBox("SmtpSend: Other Exception", &
-						oe2.getMessage(), StopSign!)
-	finally
-		If li_rc = 1 Then
-			// Success
-		Else
-			ls_errmsg = ln_smtp.of_GetLastErrorMessage()
-			MessageBox("SmtpSend Error: " + String(li_rc), &
-							ls_errmsg, StopSign!)
-			Exit	// Break out of loop
-		End If
-	end try
-Next
-
-// disconnect from the server
-try
-	li_rc = ln_smtp.of_SmtpDisconnect()
-catch ( NullObjectError noe3 )
-	MessageBox("SmtpDisconnect: Null Object Exception", &
-					noe3.getMessage(), StopSign!)
-catch ( PBXRuntimeError pbxre3 )
-	MessageBox("SmtpDisconnect: PBX Exception", &
-					pbxre3.getMessage(), StopSign!)
-catch ( Throwable oe3 )
-	MessageBox("SmtpDisconnect: Other Exception", &
-					oe3.getMessage(), StopSign!)
-finally
-	If li_rc = 1 Then
-		// Success
-	Else
-		ls_errmsg = ln_smtp.of_GetLastErrorMessage()
-		MessageBox("SmtpDisconnect Error: " + String(li_rc), &
-						ls_errmsg, StopSign!)
-	End If
-end try
-
-MessageBox(this.text, "Message Sent!")
-Destroy  ln_smtp
+Destroy  ln_smtp 
 end event
 
 type sle_subject from singlelineedit within u_tabpg_bulk
@@ -714,7 +626,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-long backcolor = 67108864
 string text = "Subject:"
 alignment alignment = right!
 boolean focusrectangle = false
