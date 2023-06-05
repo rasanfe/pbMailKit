@@ -1,33 +1,14 @@
-﻿$PBExportHeader$n_cst_smtpclient.sru
+﻿$PBExportHeader$nvo_smtpclient.sru
 forward
-global type n_cst_smtpclient from nonvisualobject
+global type nvo_smtpclient from smtpclient
 end type
 end forward
 
-global type n_cst_smtpclient from nonvisualobject
+global type nvo_smtpclient from smtpclient
 end type
-global n_cst_smtpclient n_cst_smtpclient
+global nvo_smtpclient nvo_smtpclient
 
 type variables
-Private:
-SmtpClient in_Smtp
-boolean ib_enable_tls
-integer ii_secure_protocol
-string is_encoding
-boolean ib_html
-integer ii_priority
-string is_host
-integer ii_port
-string is_user_name, is_user_pass
-string is_sender_name, is_sender_email
-string is_attachment[]
-string is_message
-string is_subject
-string is_recipient_name[], is_recipient_email[]
-string is_cc_name[], is_cc_email[]
-string is_bcc_name[], is_bcc_email[]
-String Is_ResetArray[] 
-
 Public:
 // Secure Protocol
 Constant Integer ii_ALL = 0
@@ -40,6 +21,17 @@ Constant Integer ii_TLS13 = 4
 Constant Integer ii_NormalPriority = 0
 Constant Integer ii_LowPriority = 1
 Constant Integer ii_HighPriority = 2
+
+//Reset 
+Constant Integer ii_ResetALL=0
+Constant Integer ii_ResetRecipients=1
+Constant Integer ii_ResetCcs=2
+Constant Integer ii_ResetBccs=3
+Constant Integer ii_ResetAttachments=4
+Constant Integer ii_ResetLinkedResources=5
+Constant Integer ii_ResetSender=6
+
+
 
 // Character Set Values
 // Windows-1256	Arabic (Windows)
@@ -76,6 +68,7 @@ public subroutine of_set_bcc (string as_bcc_name[], string as_bcc_email[]) throw
 public subroutine of_set_cc (string as_cc_name[], string as_cc_email[]) throws n_ex
 public subroutine of_set_recipient (string as_recipient_name[], string as_recipient_email[]) throws n_ex
 public subroutine of_add_attachment (string as_attachment) throws n_ex
+public subroutine of_enable_tls (boolean ab_enable_tls) throws n_ex
 public subroutine of_set_attachment (string as_attachment[]) throws n_ex
 public subroutine of_set_encoding (string as_encoding) throws n_ex
 public subroutine of_set_login (string as_user_name, string as_user_pass) throws n_ex
@@ -87,81 +80,17 @@ public subroutine of_set_secure_protocol (integer ai_secure_protocol) throws n_e
 public subroutine of_set_subject (string as_subject) throws n_ex
 public subroutine of_set_host (string as_host) throws n_ex
 public subroutine of_set_sender (string as_sender_name, string as_sender_email) throws n_ex
-private subroutine of_reset () throws n_ex
 private function long of_parse (readonly string as_string, readonly string as_separator, ref string as_outarray[]) throws n_ex
-public subroutine of_enable_tls (boolean ab_enable_tls) throws n_ex
 end prototypes
 
-public function integer of_send () throws n_ex;Integer li_rc, li_attachments, li_idx, li_Recipient, li_CC, li_BCC
-String ls_errorText 
-
-in_Smtp =  CREATE SMTPClient
-
-//set the email account information     
-in_Smtp.Host = is_host
-in_Smtp.Port = ii_port
-in_Smtp.UserName = is_user_name
-in_Smtp.Password = is_user_pass
-in_Smtp.EnableTLS = ib_enable_tls
-in_Smtp.SecureProtocol = ii_secure_protocol
-
-//set the email message
-in_Smtp.message.Encoding = is_encoding	
-in_Smtp.message.Priority = ii_priority
-in_Smtp.Message.SetSender(is_sender_email, is_sender_name)
-
-li_Recipient = UpperBound(is_recipient_email[])
-
-FOR li_idx = 1 TO li_Recipient
-	IF trim(is_recipient_name[li_idx]) = "" THEN  
-		in_Smtp.Message.AddRecipient(is_recipient_email[li_idx])
-	ELSE	
-		in_Smtp.Message.AddRecipient(is_recipient_email[li_idx], is_recipient_name[li_idx] )
-	END IF
-NEXT	
-
-li_CC = UpperBound(is_cc_email[])
-
-FOR li_idx = 1 TO li_CC
-	IF trim(is_cc_name[li_idx]) = "" THEN  
-		in_Smtp.Message.AddCc(is_cc_email[li_idx])
-	ELSE
-		in_Smtp.Message.AddCc(is_cc_email[li_idx], is_cc_name[li_idx])
-	END IF
-NEXT	
-
-
-li_BCC = UpperBound(is_bcc_email[])
-
-FOR li_idx = 1 TO li_BCC
-	IF trim(is_Bcc_name[li_idx]) = "" THEN 
-		in_Smtp.Message.AddBcc(is_bcc_email[li_idx])
-	ELSE	
-		in_Smtp.Message.AddBcc(is_bcc_email[li_idx], is_bcc_name[li_idx])
-	END IF
-NEXT	
-
-in_Smtp.message.Subject = is_subject
-
-li_attachments = UpperBound(is_attachment[]) 
-
-FOR li_idx = 1 TO li_attachments
-	in_Smtp.Message.AddAttachment( is_attachment[li_idx])
-NEXT
-
-IF ib_html = TRUE THEN
-	in_Smtp.Message.HTMLBody = is_message
-ELSE
-	in_Smtp.Message.TextBody= is_message
-END IF	
-
+public function integer of_send () throws n_ex;Integer li_rc
+String ls_errorText
 
 //send the email message
-li_rc = in_Smtp.Send()
+li_rc = This.Send()
 
 //Reseteamos Variables Por si no destruimos el Objeto
-of_reset()
-Destroy in_Smtp
+This.Message.Reset(ii_ResetALL)  
 
 CHOOSE CASE li_rc
 	CASE -1
@@ -318,7 +247,7 @@ For li_idx = 1 To li_max
 Next
 
 // dividir el dominio en partes
-li_max = of_parse(ls_domain, ".", REF ls_domainpart[])
+li_max =of_parse(ls_domain, ".", REF ls_domainpart[])
 
 If li_max > 127 Then
 	gf_throw(PopulateError(15, "¡La parte del dominio de la dirección de correo electrónico contiene demasiados puntos!"))
@@ -336,112 +265,105 @@ Next
 RETURN as_email
 end function
 
-public subroutine of_add_bcc (string as_bcc_name, string as_bcc_email) throws n_ex;integer li_idx, li_TotalArray
+public subroutine of_add_bcc (string as_bcc_name, string as_bcc_email) throws n_ex;as_bcc_email  = of_valid_email(as_bcc_email)
+as_bcc_name  = trim(as_bcc_name)
 
-li_TotalArray = UpperBound(is_bcc_email[])
+IF as_Bcc_name = "" THEN 
+		This.Message.AddBcc(as_bcc_email)
+ELSE	
+		This.Message.AddBcc(as_bcc_email, as_bcc_name)
+END IF
 
-li_idx = li_TotalArray + 1
 
-is_bcc_email[li_idx] = of_valid_email(as_bcc_email)
-is_bcc_name[li_idx] = trim(as_bcc_name)
 
+end subroutine
+
+public subroutine of_add_cc (string as_cc_name, string as_cc_email) throws n_ex;as_cc_email  = of_valid_email(as_cc_email)
+as_cc_name  = trim(as_cc_name)
+
+IF as_cc_name = "" THEN  
+	This.Message.AddCc(as_cc_email)
+ELSE
+	This.Message.AddCc(as_cc_email, as_cc_name)
+END IF
+	
 
 
 end subroutine
 
-public subroutine of_add_cc (string as_cc_name, string as_cc_email) throws n_ex;Integer li_idx, li_TotalArray
+public subroutine of_add_recipient (string as_recipient_name, string as_recipient_email) throws n_ex;as_recipient_email = of_valid_email(as_recipient_email)
+as_recipient_name= trim(as_recipient_name)
 
-li_TotalArray = UpperBound(is_cc_email[])
-
-li_idx = li_TotalArray + 1
-
-is_cc_email[li_idx]  = of_valid_email(as_cc_email)
-is_cc_name[li_idx]  = trim(as_cc_name)
-
+IF as_recipient_name = "" THEN  
+	This.Message.AddRecipient(as_recipient_email)
+ELSE	
+	This.Message.AddRecipient(as_recipient_email, as_recipient_name)
+END IF
 end subroutine
 
-public subroutine of_add_recipient (string as_recipient_name, string as_recipient_email) throws n_ex;Integer li_idx, li_TotalArray
+public subroutine of_set_bcc (string as_bcc_name[], string as_bcc_email[]) throws n_ex;integer li_bcc, li_TotalBcc
 
-li_TotalArray = UpperBound(is_recipient_email[])
+This.Message.Reset(ii_ResetBccs)  
 
-li_idx = li_TotalArray + 1
+li_TotalBcc = UpperBound(as_bcc_email[])
 
-is_recipient_email[li_idx] = of_valid_email(as_recipient_email)
-is_recipient_name[li_idx] = trim(as_recipient_name)
-
-end subroutine
-
-public subroutine of_set_bcc (string as_bcc_name[], string as_bcc_email[]) throws n_ex;integer li_idx, li_TotalArray
-
-//Reseteamos Las Arrays
-is_bcc_name[] = is_ResetArray[]
-is_bcc_email = is_ResetArray[]
-
-li_TotalArray = UpperBound(as_bcc_email[])
-
-FOR li_idx = 1 TO li_TotalArray
-	of_add_bcc(as_bcc_name[li_idx], as_bcc_email[li_idx])
+FOR li_bcc = 1 TO li_TotalBcc
+	of_add_bcc(as_bcc_name[li_bcc], as_bcc_email[li_bcc])
 NEXT
-
 end subroutine
 
-public subroutine of_set_cc (string as_cc_name[], string as_cc_email[]) throws n_ex;integer li_idx, li_TotalArray
+public subroutine of_set_cc (string as_cc_name[], string as_cc_email[]) throws n_ex;integer li_Cc, li_TotalCc
 
-//Reseteamos Las Arrays
-is_cc_name[] = is_ResetArray[]
-is_cc_email = is_ResetArray[]
+This.Message.Reset(ii_ResetCcs)  
 
-li_TotalArray = UpperBound(as_cc_email[])
+li_TotalCc = UpperBound(as_Cc_email[])
 
-FOR li_idx = 1 TO li_TotalArray
-	of_add_cc(as_cc_name[li_idx], as_cc_email[li_idx])
+FOR li_Cc = 1 TO li_TotalCc
+	of_add_Cc(as_Cc_name[li_Cc], as_Cc_email[li_Cc])
 NEXT
-
 end subroutine
 
-public subroutine of_set_recipient (string as_recipient_name[], string as_recipient_email[]) throws n_ex;integer li_idx, li_TotalArray
+public subroutine of_set_recipient (string as_recipient_name[], string as_recipient_email[]) throws n_ex;integer li_Recipient, li_TotalRecipient
 
-//Reseteamos las Arrays
-is_recipient_name[] = is_ResetArray[]
-is_recipient_email[] = is_ResetArray[]
+This.Message.Reset(ii_ResetRecipients)  
 
-li_TotalArray = UpperBound(as_recipient_email[])
+li_TotalRecipient = UpperBound(as_Recipient_email[])
 
-FOR li_idx = 1 TO li_TotalArray
-	 of_add_recipient(as_recipient_name[li_idx], as_recipient_email[li_idx])
+FOR li_Recipient = 1 TO li_TotalRecipient
+	of_add_Recipient(as_Recipient_name[li_Recipient], as_Recipient_email[li_Recipient])
 NEXT
-
 end subroutine
 
-public subroutine of_add_attachment (string as_attachment) throws n_ex;integer li_idx, li_TotalArray
+public subroutine of_add_attachment (string as_attachment) throws n_ex;as_attachment = trim(as_attachment)
 
 IF NOT FileExists(as_attachment) THEN
 	gf_throw(PopulateError(1, "¡ El archivo adjunto "+as_attachment+" no existe !"))
 END IF	
 
-li_TotalArray = UpperBound(is_attachment[])
+This.Message.AddAttachment(as_attachment)
 
-li_idx = li_TotalArray + 1
-
-is_attachment[li_idx] = trim(as_attachment)
 
 end subroutine
 
-public subroutine of_set_attachment (string as_attachment[]) throws n_ex;integer li_idx, li_TotalArray
+public subroutine of_enable_tls (boolean ab_enable_tls) throws n_ex;If isnull(ab_enable_tls) Then
+	gf_throw(PopulateError(1, "¡Hay que indicar si queremos usar TLS!"))
+End If
 
-//Reseteamos La Array
-is_attachment[] = is_ResetArray[]
+This.EnableTLS = ab_enable_tls
+end subroutine
 
-IF as_attachment[] =  is_ResetArray[] THEN RETURN
+public subroutine of_set_attachment (string as_attachment[]) throws n_ex;integer li_atach, li_TotalAttachment
 
-li_TotalArray = UpperBound(as_attachment[])
+This.Message.Reset(ii_ResetAttachments)  
 
-FOR li_idx = 1 TO li_TotalArray
-	of_add_attachment(as_attachment[li_idx])
+li_TotalAttachment = UpperBound(as_attachment[])
+
+FOR li_atach = 1 TO li_TotalAttachment
+	of_add_attachment(as_attachment[li_atach])
 NEXT
 end subroutine
 
-public subroutine of_set_encoding (string as_encoding) throws n_ex;is_encoding = as_encoding	
+public subroutine of_set_encoding (string as_encoding) throws n_ex;This.message.Encoding = as_encoding	
 
 end subroutine
 
@@ -452,16 +374,18 @@ If trim(as_user_pass) = "" Then
 	gf_throw(PopulateError(2, "¡Hay que indicar el Password de Usuario!"))
 End If
 
-is_user_name = as_user_name
-is_user_pass = as_user_pass
-
+This.UserName =  as_user_name
+This.Password = as_user_pass
 end subroutine
 
 public subroutine of_set_message (string as_message) throws n_ex;of_set_message(as_message, FALSE)
 end subroutine
 
-public subroutine of_set_message (string as_message, boolean ab_html) throws n_ex;is_message = as_message
-ib_html = ab_html
+public subroutine of_set_message (string as_message, boolean ab_html) throws n_ex;IF ab_html = TRUE THEN
+	This.Message.HTMLBody = as_message
+ELSE
+	This.Message.TextBody= as_message
+END IF	
 
 end subroutine
 
@@ -469,26 +393,28 @@ public subroutine of_set_port (integer ai_port) throws n_ex;IF ai_port <> 25 AND
 	gf_throw(PopulateError(1, "¡ El Puerto "+string(ai_port)+" no es válido !"))
 END IF	
 
-ii_port = ai_port
+This.Port =ai_port
+
+
 end subroutine
 
 public subroutine of_set_priority (integer ai_priority) throws n_ex;IF ai_priority < 0 OR ai_priority > 2 THEN
 	gf_throw(PopulateError(1, "¡ La Prioridad debe estar entre 0 y 2 !"))
 END IF	
 
-ii_priority = ai_priority
+This.message.Priority = ai_priority
 
 end subroutine
 
-public subroutine of_set_secure_protocol (integer ai_secure_protocol) throws n_ex;IF ii_secure_protocol < 0 or ii_secure_protocol > 4  THEN
+public subroutine of_set_secure_protocol (integer ai_secure_protocol) throws n_ex;IF ai_secure_protocol < 0 or ai_secure_protocol > 4  THEN
 	gf_throw(PopulateError(1, "¡ El Protocolo de Seguridad debe estar entre 0 y 4 !"))
 END IF	
 
-ii_secure_protocol = ai_secure_protocol
+This.SecureProtocol = ai_secure_protocol
 
 end subroutine
 
-public subroutine of_set_subject (string as_subject) throws n_ex;is_subject = trim(as_subject)
+public subroutine of_set_subject (string as_subject) throws n_ex;This.message.Subject = trim(as_subject)
 
 end subroutine
 
@@ -496,38 +422,14 @@ public subroutine of_set_host (string as_host) throws n_ex;If trim(as_host) = ""
 	gf_throw(PopulateError(1, "¡Hay que indicar un Servidor SMTP!"))
 End If
 
-is_host = as_host
+This.Host = as_host
 
 end subroutine
 
-public subroutine of_set_sender (string as_sender_name, string as_sender_email) throws n_ex;is_sender_email = of_valid_email(as_sender_email)
-is_sender_name = trim(as_sender_name)
-end subroutine
+public subroutine of_set_sender (string as_sender_name, string as_sender_email) throws n_ex;as_sender_email = of_valid_email(as_sender_email)
+as_sender_name = trim(as_sender_name)
 
-private subroutine of_reset () throws n_ex;//Resetear Variables:
-ib_enable_tls = TRUE
-ii_secure_protocol=ii_ALL
-is_encoding= "UTF-8"
-ib_html=FALSE
-ii_priority = ii_NormalPriority
-is_host =""
-ii_port = 587
-is_user_name=""
-is_user_pass=""
-is_sender_name=""
-is_sender_email=""
-is_attachment[] =  is_ResetArray[] 
-is_message= ""
-is_subject= ""
-is_recipient_name[] =  is_ResetArray[] 
-is_recipient_email[] =  is_ResetArray[] 
-is_cc_name[] =  is_ResetArray[] 
-is_cc_email[] =  is_ResetArray[] 
-is_bcc_name[] =  is_ResetArray[] 
-is_bcc_email[] =  is_ResetArray[] 
-
-
-
+This.Message.SetSender(as_sender_email, as_sender_name)
 end subroutine
 
 private function long of_parse (readonly string as_string, readonly string as_separator, ref string as_outarray[]) throws n_ex;// -----------------------------------------------------------------------------
@@ -567,24 +469,13 @@ Return ll_Counter
 
 end function
 
-public subroutine of_enable_tls (boolean ab_enable_tls) throws n_ex;If isnull(ab_enable_tls) Then
-	gf_throw(PopulateError(1, "¡Hay que indicar si queremos usar TLS!"))
-End If
-
-ib_enable_tls = ab_enable_tls
-
-end subroutine
-
-on n_cst_smtpclient.create
+on nvo_smtpclient.create
 call super::create
 TriggerEvent( this, "constructor" )
 end on
 
-on n_cst_smtpclient.destroy
+on nvo_smtpclient.destroy
 TriggerEvent( this, "destructor" )
 call super::destroy
 end on
-
-event destructor;if isValid(in_Smtp) then Destroy in_Smtp
-end event
 

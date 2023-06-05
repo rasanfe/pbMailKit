@@ -572,7 +572,7 @@ string facename = "Tahoma"
 string text = "Send Email"
 end type
 
-event clicked;n_cst_smtpclient ln_smtp 
+event clicked;nvo_smtpclient ln_smtp 
 Boolean lb_Html, lb_Priority, lb_Receipt
 Integer li_port, li_idx, li_max, li_SecureProtocol, li_rc
 String ls_server, ls_body, ls_userid, ls_passwd, ls_subject, ls_attach, ls_enableTLS
@@ -585,7 +585,7 @@ SetPointer(HourGlass!)
 
 ChangeDirectory(is_currentdirectory)
 
- ln_smtp  = CREATE n_cst_smtpclient
+ ln_smtp  = CREATE nvo_smtpclient
 
 // get settings
 ls_server     = of_getreg("Server", "")
