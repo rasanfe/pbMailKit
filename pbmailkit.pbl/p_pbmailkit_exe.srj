@@ -1,0 +1,26 @@
+﻿//objectcomments Generated Application Executable Project
+EXE:pbmailkit.exe,,0,1,1,0,C:\Program Files (x86)\Appeon\Common\PowerBuilder\Runtime 25.0.0.3683
+CMP:0,0,0,3,0,0,1
+COM:RSRSYSTEM
+DES:Appeon Power Builder 2025 Product File 64Bits
+CPY:Ramón San Félix Ramón
+PRD:PBMailkit2025
+PVS:2025.1.3683.15
+PVN:2025,1,3683,15
+FVS:2025.1.3683.15
+FVN:2025,1,3683,15
+MAN:0,asInvoker,0
+PBD:pbmailkit.pbl,,1
+OBJ:C:\proyecto pw2025\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,gf_throw,f
+OBJ:C:\proyecto pw2025\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,u_tabpg,u
+OBJ:C:\proyecto pw2025\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,u_tabpg_settings,u
+OBJ:C:\proyecto pw2025\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,gf_iif,f
+OBJ:C:\proyecto pw2025\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,nvo_smtpclient,u
+OBJ:C:\proyecto pw2025\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,n_ex,u
+OBJ:C:\proyecto pw2025\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,d_settings,d
+OBJ:C:\proyecto pw2025\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,w_main,w
+OBJ:C:\proyecto pw2025\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,u_tab_main,u
+OBJ:C:\proyecto pw2025\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,u_tab,u
+OBJ:C:\proyecto pw2025\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,u_tabpg_smtp,u
+OBJ:C:\proyecto pw2025\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,pbmailkit,a
+OBJ:C:\proyecto pw2025\Blog\PowerBuilder\pbMailkit\pbmailkit.pbl,u_tabpg_bulk,u

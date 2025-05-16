@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Project>
+  <Type Name="pb"/>
+  <Application Name="pbmailkit"/>
+  <Libraries AppEntry="pbmailkit.pbl">
+    <Library Path="pbmailkit.pbl"/>
+  </Libraries>
+</Project>

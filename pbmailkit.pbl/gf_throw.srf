@@ -1,0 +1,48 @@
+﻿global type gf_throw from function_object
+end type
+
+forward prototypes
+global subroutine gf_throw (integer ai_populate_error_rc_dummy) throws n_ex
+end prototypes
+
+global subroutine gf_throw (integer ai_populate_error_rc_dummy) throws n_ex;/**********************************************************************************************************************
+Dscr:			Creates an Exception object (of type n_ex), populates the exception-related data and throws.
+				Should be called this way:
+				
+				gf_throw(PopulateError(<error number>, "<error message>"))
+				
+				<error number> is an integer, used to quickly identify the exception in a script which throws many
+				exceptions (so, pass 1 for the first, 2 for the second etc.). Simply pass 0 if only one exception is thrown
+				in the script, or if you don't want to mark exceptions with numbers. The error number is not used by
+				the program and, so, has no importanse (it's an argument of PopulateError, so we need to provide a value).
+				
+				After an exception, thrown by this func (gf_throw), is caught, the exception-related information
+				can be obtained and displayed to user by n_ex.of_msg():
+				
+				try
+					of_function_which_throws_n_ex_using_f_throw() // an exception can be thrown...
+					if ... then gf_throw(PopulateError(0, "Oooops...")) // another exception can be thrown...
+				catch(n_ex e)
+					e.of_msg()
+				end try
+				
+				More details: http://code.intfast.ca/viewtopic.php?t=1
+***********************************************************************************************************************
+Arg:			ai_populate_error_rc_dummy - placeholder for return code of PopulateError().
+											The only purpose of this argument is to allow writing PopulateError inside the
+											argument parentheses of gf_throw to fit the whole exception throw in one line of code
+***********************************************************************************************************************
+Developer:	Michael Zuskin > http://linkedin.com/in/zuskin | http://code.intfast.ca/
+Change:		Ramón San Félix Ramón  16-11-2022  Renombro función f_throw a gf_throw por cuestion de nombenglatura en mi programa.
+**********************************************************************************************************************/
+n_ex	ln_ex
+
+ln_ex = create n_ex
+
+// The variables of the Error object have been populated by PopulateError().
+// Copy them to the Exception object, so n_ex.of_msg() will be able to read them and display to user:
+ln_ex.of_populate(Error.Number, Error.Text, Error.Object, Error.ObjectEvent, Error.Line)
+
+throw ln_ex
+end subroutine
+

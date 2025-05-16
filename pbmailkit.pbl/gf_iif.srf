@@ -1,0 +1,51 @@
+﻿global type gf_iif from function_object
+end type
+
+forward prototypes
+global function any gf_iif (readonly boolean ab_expression, readonly any aa_TRUE, readonly any aa_FALSE)
+end prototypes
+
+global function any gf_iif (readonly boolean ab_expression, readonly any aa_TRUE, readonly any aa_FALSE);/*
+Method				:  FN_IIF (Global Function) 
+Author				: Chris Pollach
+Scope  				: Public
+Extended				: No
+Level					: Base'
+
+Description			: Performs just like the DataWindow IF () method or C++'s Iif [Immediate IF] command
+Behaviour			: Allows the PB developer to use an "Immediate If" like command in their PowerScript code.
+							For example:
+								
+								lb_db_connected  = FN_IIF ( SQLCA.DBHandle > 0 , TRUE, FALSE) 
+								
+Note					:  Retuns NULL if ab_Expression is NULL
+
+Argument(s)			: Boolean (ReadOnly)		-	ab_expression
+							any (ReadOnly)			-	aa_TRUE
+							any (ReadOnly)			-	aa_FALSE
+							
+Throws				: N/A
+
+RETURN Value		: none
+
+-----------------------------------------------------------  CopyRight ------------------------------------------------------------------
+Copyright © 2013 by Software Tool & Die Inc, here in known as STD Inc.  All rights reserved.
+Any distribution of the STD Foundation Classes (STD_FC) for InfoMaker, Appeon,
+PowerBuilder® source code by other than STD, Inc. is prohibited.
+-----------------------------------------------------------  Revisions -------------------------------------------------------------------
+1.0 		Inital Version																		-	2013-04-22
+*/
+
+// Declarations
+Any		la_null																					// Work Var.
+
+IF	IsNull ( ab_Expression ) THEN      															// Passed a Null?
+	SetNull (la_null)																					// YES=>Set Null
+	 RETURN 	la_null																				// Pass it back
+ELSEIF ab_Expression  = TRUE THEN																// NO=>Espression True?
+   RETURN 	aa_TRUE 																						// YES=>Pass this back
+END IF 
+RETURN	aa_FALSE 																					// RETURN FALSE to caller
+
+end function
+

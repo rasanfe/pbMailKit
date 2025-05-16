@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Solution>
+  <Projects Default="pbmailkit.pbproj">
+    <Project Path="pbmailkit.pbproj"/>
+  </Projects>
+</Solution>
